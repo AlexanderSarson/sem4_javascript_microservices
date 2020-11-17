@@ -13,7 +13,7 @@ namespace: geo
 images:
 - name: alexandersarson/auth-geo
   newName: alexandersarson/auth-geo
-  newTag: 6a99c45cfad1c1a43ae212b39214d49a2b48e4c7
+  newTag: e12c2559ab0daf097c3f7bee311f2a82e8adb115
 - name: alexandersarson/geo-auth
 - name: alexandersarson/geo-expiration
   newName: alexandersarson/geo-expiration
