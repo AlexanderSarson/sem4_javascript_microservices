@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-      paths:
-        - 'auth/**'
+    paths:
+      - 'auth/**'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -51,7 +51,7 @@ jobs:
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         with:
-          kustomize-version: "3.6.1"
+          kustomize-version: '3.6.1'
 
       - name: Update Kubernetes resources
         env:
@@ -69,4 +69,3 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
