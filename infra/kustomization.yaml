@@ -18,3 +18,5 @@ images:
   newName: alexandersarson/geo-expiration
   newTag: 29058743532df83f9f989a8a8566d5147b490615
 - name: alexandersarson/geo-position
+  newName: alexandersarson/geo-position
+  newTag: 45f3a66e818e316e1f8837be7b2c1751a316b30a
