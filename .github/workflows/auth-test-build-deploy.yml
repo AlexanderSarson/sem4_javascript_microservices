@@ -1,11 +1,9 @@
-name: tests-auth
+name: auth-test-build-deploy
 
 on:
   push:
     branches:
       - master
-    paths:
-      - 'auth/**'
 jobs:
   test:
     runs-on: ubuntu-latest
