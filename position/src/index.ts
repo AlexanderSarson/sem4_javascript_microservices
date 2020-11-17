@@ -27,6 +27,7 @@ const start = async () => {
       console.log('NATS connection closed!');
       process.exit();
     });
+    //Remove nats client
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
