@@ -12,6 +12,8 @@ resources:
 namespace: geo
 images:
 - name: alexandersarson/geo-auth
+  newName: alexandersarson/geo-auth
+  newTag: 29058743532df83f9f989a8a8566d5147b490615
 - name: alexandersarson/geo-expiration
   newName: alexandersarson/geo-expiration
   newTag: 29058743532df83f9f989a8a8566d5147b490615
