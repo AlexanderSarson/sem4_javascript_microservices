@@ -22,7 +22,7 @@ const start = async () => {
       console.log('NATS connection closed!');
       process.exit();
     });
-    //NATS remove client
+    //NATS remove client ok
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
