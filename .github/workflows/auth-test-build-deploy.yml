@@ -2,6 +2,8 @@ name: tests-auth
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'auth/**'
 jobs:
