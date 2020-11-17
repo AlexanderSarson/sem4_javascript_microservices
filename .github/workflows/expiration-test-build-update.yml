@@ -14,7 +14,6 @@ jobs:
   #     - run: cd expiration && npm install && npm run test:ci
   build:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - uses: actions/checkout@v2
 
