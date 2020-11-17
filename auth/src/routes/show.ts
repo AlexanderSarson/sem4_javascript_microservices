@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-// import { NotFoundError } from '../errors/not-found-error';
 import { NotFoundError } from '@alsafullstack/common';
 
 import { User } from '../models/user';

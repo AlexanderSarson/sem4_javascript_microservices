@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: position-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position-mongo
+  template:
+    metadata:
+      labels:
+        app: position-mongo
+    spec:
+      containers:
+        - name: position-mongo
+          image: mongo
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: position-mongo-srv
+spec:
+  selector:
+    app: position-mongo
+  ports:
+    - name: db
+      port: 27017
+      targetPort: 27017
+      protocol: TCP

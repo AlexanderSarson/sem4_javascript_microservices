@@ -1,21 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: position-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: position
   template:
     metadata:
       labels:
-        app: auth
+        app: position
     spec:
       containers:
-        - name: auth
-          image: alexandersarson/geo-auth
+        - name: position
+          image: alexandersarson/geo-position
           env:
+            - name: EXPIRATION_WINDOW_SECONDS
+              value: '500'
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
@@ -25,7 +27,7 @@ spec:
             - name: NATS_CLUSTER_ID
               value: geo
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://position-mongo-srv:27017/position'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -39,12 +41,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: position-srv
 spec:
   selector:
-    app: auth
+    app: position
   ports:
     - port: 3000
       targetPort: 3000
-      name: auth
+      name: position
       protocol: TCP

@@ -7,12 +7,8 @@ import {
   errorHandler,
   currentUser,
 } from '@alsafullstack/common';
-
-import { newUserRouter } from './routes/new';
-import { allUserRouter } from './routes/all';
-import { showUserRouter } from './routes/show';
-import { signinUserRouter } from './routes/signin';
-import { deleteUserRouter } from './routes/delete';
+import { newPositionRouter } from './routes/new';
+import { findNearbyPlayers } from './routes/nearby-players';
 
 const app = express();
 app.set('trust proxy', true);
@@ -23,12 +19,10 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
+
 app.use(currentUser);
-app.use(newUserRouter);
-app.use(allUserRouter);
-app.use(showUserRouter);
-app.use(signinUserRouter);
-app.use(deleteUserRouter);
+app.use(newPositionRouter);
+app.use(findNearbyPlayers);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-// import { validateRequest } from '../middlewares/validate-request';
 import { User } from '../models/user';
-// import { BadRequestError } from '../errors/bad-request-error';
 import jwt from 'jsonwebtoken';
 import { validateRequest, BadRequestError } from '@alsafullstack/common';
+import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
+
 const router = express.Router();
 
 router.post(
@@ -30,6 +31,12 @@ router.post(
 
     const user = User.build({ userName, password, name, role });
     await user.save();
+
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: user.id,
+      userName: user.userName,
+      name: user.name,
+    });
 
     // Generate json webtoken
     const userJwt = jwt.sign(
