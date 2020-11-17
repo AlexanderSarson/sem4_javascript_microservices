@@ -1,16 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./k8s/auth-depl.yaml
-  - ./k8s/auth-mongo-depl.yaml
-  - ./k8s/expiration-depl.yaml
-  - ./k8s/expiration-redis-depl.yaml
-  - ./k8s/nats-depl.yaml
-  - ./k8s/position-depl.yaml
-  - ./k8s/position-mongo-depl.yaml
-  - ./k8s-prod/ingress-srv.yaml
+- ./k8s/auth-depl.yaml
+- ./k8s/auth-mongo-depl.yaml
+- ./k8s/expiration-depl.yaml
+- ./k8s/expiration-redis-depl.yaml
+- ./k8s/nats-depl.yaml
+- ./k8s/position-depl.yaml
+- ./k8s/position-mongo-depl.yaml
+- ./k8s-prod/ingress-srv.yaml
 namespace: geo
 images:
-  - name: alexandersarson/geo-auth
-  - name: alexandersarson/geo-position
-  - name: alexandersarson/geo-expiration
+- name: alexandersarson/geo-auth
+- name: alexandersarson/geo-expiration
+  newName: alexandersarson/geo-expiration
+  newTag: 29058743532df83f9f989a8a8566d5147b490615
+- name: alexandersarson/geo-position
