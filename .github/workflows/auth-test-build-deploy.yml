@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'auth/**'
+
 jobs:
   test:
     runs-on: ubuntu-latest
