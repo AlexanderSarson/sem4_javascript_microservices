@@ -2,8 +2,6 @@ name: position-test-build-deploy
 
 on:
   push:
-    branches:
-      - master
     paths:
       - 'position/**'
 jobs:
