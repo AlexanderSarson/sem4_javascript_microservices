@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-mongo-depl
+  namespace: geo
 spec:
   replicas: 1
   selector:
@@ -13,17 +14,18 @@ spec:
         app: auth-mongo
     spec:
       containers:
-      - name: auth-mongo
-        image: mongo
-        resources:
-          limits:
-            memory: "500Mi"
-            cpu: "500m"
+        - name: auth-mongo
+          image: mongo
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: auth-mongo-srv
+  namespace: geo
 spec:
   selector:
     app: auth-mongo
