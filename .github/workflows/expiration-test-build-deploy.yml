@@ -1,17 +1,17 @@
-name: auth-test-build-deploy
+name: expiration-test-build-deploy
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'auth/**'
+      - 'expiration/**'
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd auth && npm install && npm run test:ci
+      - run: cd expiration && npm install && npm run test:ci
   build:
     runs-on: ubuntu-latest
     needs: test
@@ -33,13 +33,13 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: auth
-          file: ./auth/Dockerfile
+          context: expiration
+          file: ./expiration/Dockerfile
           platforms: linux/amd64,linux/arm64 # Remember image in dockerfile should also support these platforms
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:latest 
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_EXPIRATION }}:latest 
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_EXPIRATION }}:${{ github.sha }}
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           cd infra
-          kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}=${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:${{ github.sha }}
+          kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_EXPIRATION }}=${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_EXPIRATION }}:${{ github.sha }}
           cat kustomization.yaml
       - name: Commit files
         run: |

@@ -1,11 +1,11 @@
-name: auth-test-build-deploy
+name: position-test-build-deploy
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'auth/**'
+      - 'position/**'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -33,13 +33,13 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: auth
-          file: ./Dockerfile
+          context: position
+          file: ./position/Dockerfile
           platforms: linux/amd64,linux/arm64 # Remember image in dockerfile should also support these platforms
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:latest 
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:latest 
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:${{ github.sha }}
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           cd infra
-          kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}=${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_AUTH }}:${{ github.sha }}
+          kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}=${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:${{ github.sha }}
           cat kustomization.yaml
       - name: Commit files
         run: |
