@@ -64,6 +64,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git config --local pull.ff only
+          git pull
           git commit -am "Bump docker tag"
       - name: Push changes
         uses: ad-m/github-push-action@master
