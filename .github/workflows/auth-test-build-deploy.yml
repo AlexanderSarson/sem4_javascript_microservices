@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'auth/**'
-
 jobs:
   test:
     runs-on: ubuntu-latest
