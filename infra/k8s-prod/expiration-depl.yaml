@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+  namespace: geo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: alexandersarson/geo-expiration
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: geo
+            - name: REDIS_HOST
+              value: expiration-redis-srv
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+          ports:
+            - name: liveness-port
+              containerPort: 3000
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: liveness-port
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: liveness-port
+            periodSeconds: 4

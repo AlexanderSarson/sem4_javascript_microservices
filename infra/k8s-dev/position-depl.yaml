@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: position-depl
+  namespace: geo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position
+  template:
+    metadata:
+      labels:
+        app: position
+    spec:
+      containers:
+        - name: position
+          image: alexandersarson/geo-position
+          env:
+            - name: EXPIRATION_WINDOW_SECONDS
+              value: '30'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: geo
+            - name: MONGO_URI
+              value: 'mongodb://position-mongo-srv:27017/position'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: position-srv
+  namespace: geo
+spec:
+  selector:
+    app: position
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: position
+      protocol: TCP
