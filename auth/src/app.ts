@@ -13,6 +13,7 @@ import { allUserRouter } from './routes/all';
 import { showUserRouter } from './routes/show';
 import { signinUserRouter } from './routes/signin';
 import { deleteUserRouter } from './routes/delete';
+import { healthCheckRouter } from './routes/healthcheck';
 
 const app = express();
 app.set('trust proxy', true);
@@ -29,6 +30,7 @@ app.use(allUserRouter);
 app.use(showUserRouter);
 app.use(signinUserRouter);
 app.use(deleteUserRouter);
+app.use(healthCheckRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
