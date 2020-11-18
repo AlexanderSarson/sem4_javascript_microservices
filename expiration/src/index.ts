@@ -1,7 +1,9 @@
 import { natsWrapper } from './nats-wrapper';
 import { PositionCreatedListener } from './events/listeners/position-created-listener';
+import { app } from './app';
 
 const start = async () => {
+  console.log('Starting up....');
   if (!process.env.NATS_URL) {
     throw new Error('NATS url must be defined');
   }
@@ -30,6 +32,7 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+  app.listen(3000, () => console.log('Listening on port 3000'));
 };
 
 start();
