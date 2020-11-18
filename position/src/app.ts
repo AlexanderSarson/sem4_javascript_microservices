@@ -9,6 +9,7 @@ import {
 } from '@alsafullstack/common';
 import { newPositionRouter } from './routes/new';
 import { findNearbyPlayers } from './routes/nearby-players';
+import { healthCheckRouter } from './routes/healthcheck';
 
 const app = express();
 app.set('trust proxy', true);
@@ -23,6 +24,7 @@ app.use(
 app.use(currentUser);
 app.use(newPositionRouter);
 app.use(findNearbyPlayers);
+app.use(healthCheckRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
