@@ -20,11 +20,10 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
-
+app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(newPositionRouter);
 app.use(findNearbyPlayers);
-app.use(healthCheckRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
