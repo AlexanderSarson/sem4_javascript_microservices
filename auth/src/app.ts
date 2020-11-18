@@ -16,6 +16,7 @@ import { deleteUserRouter } from './routes/delete';
 import { healthCheckRouter } from './routes/healthcheck';
 
 const app = express();
+
 app.set('trust proxy', true);
 app.use(json());
 app.use(
@@ -24,13 +25,13 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
+app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(newUserRouter);
 app.use(allUserRouter);
 app.use(showUserRouter);
 app.use(signinUserRouter);
 app.use(deleteUserRouter);
-app.use(healthCheckRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
