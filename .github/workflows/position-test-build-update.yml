@@ -37,9 +37,7 @@ jobs:
           file: ./position/Dockerfile
           platforms: linux/amd64,linux/arm64 # Remember image in dockerfile should also support these platforms
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:latest 
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:latest,${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POSITION }}:${{ github.sha }}
   update:
     runs-on: ubuntu-latest
     needs: build
