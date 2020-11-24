@@ -19,6 +19,10 @@ spec:
             backend:
               serviceName: position-srv
               servicePort: 3000
+          - path: /api/post/?(.*)
+            backend:
+              serviceName: post-srv
+              servicePort: 3000
           # - path: /?(.*)
           #   backend:
           #     serviceName: client-srv

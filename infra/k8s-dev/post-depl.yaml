@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-depl
+  namespace: geo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post
+  template:
+    metadata:
+      labels:
+        app: post
+    spec:
+      containers:
+        - name: post
+          image: alexandersarson/geo-post
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: geo
+            - name: MONGO_URI
+              value: 'mongodb://post-mongo-srv:27017/post'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-srv
+  namespace: geo
+spec:
+  selector:
+    app: post
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: post
+      protocol: TCP

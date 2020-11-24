@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-mongo-depl
+  namespace: geo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-mongo
+  template:
+    metadata:
+      labels:
+        app: post-mongo
+    spec:
+      containers:
+        - name: post-mongo
+          image: mongo
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-mongo-srv
+  namespace: geo
+spec:
+  selector:
+    app: post-mongo
+  ports:
+    - name: db
+      port: 27017
+      targetPort: 27017
+      protocol: TCP
