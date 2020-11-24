@@ -7,13 +7,13 @@ import {
   errorHandler,
   currentUser,
 } from '@alsafullstack/common';
-
 import { newUserRouter } from './routes/new';
 import { allUserRouter } from './routes/all';
 import { showUserRouter } from './routes/show';
 import { signinUserRouter } from './routes/signin';
 import { deleteUserRouter } from './routes/delete';
 import { healthCheckRouter } from './routes/healthcheck';
+import morgan from 'morgan';
 
 const app = express();
 
@@ -25,6 +25,7 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
+app.use(morgan('tiny'));
 app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(newUserRouter);
