@@ -7,6 +7,8 @@ import {
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { Position } from '../../models/position';
+import { PositionDeletedPublisher } from '../publishers/position-deleted-publisher';
+import { natsWrapper } from '../../nats-wrapper';
 
 class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent> {
   readonly subject = Subjects.ExpirationComplete;
@@ -20,6 +22,10 @@ class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent> {
       throw new NotFoundError('Could not find positionId: ' + positionId);
 
     await position.deleteOne();
+
+    new PositionDeletedPublisher(natsWrapper.client).publish({
+      id: position.id,
+    });
 
     msg.ack();
   }
