@@ -44,9 +44,8 @@ router.post(
 
     new PositionCreatedPublisher(natsWrapper.client).publish({
       id: position.id,
-      location: position.location,
+      coordinates: position.location.coordinates,
       userId: user.id,
-      expiresAt: position.expiresAt.toISOString(),
       version: position.version,
     });
 
