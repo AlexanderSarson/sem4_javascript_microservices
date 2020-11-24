@@ -47,6 +47,7 @@ router.post(
       coordinates: position.location.coordinates,
       userId: user.id,
       version: position.version,
+      expiresAt: position.expiresAt.toISOString(),
     });
 
     res.status(201).send(position);
