@@ -1,1 +1,1 @@
-export const queueGroupName = 'geo-service';
+export const queueGroupName = 'position-service';
