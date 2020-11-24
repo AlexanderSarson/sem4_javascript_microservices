@@ -1,5 +1,6 @@
 import { natsWrapper } from './nats-wrapper';
 import { PositionCreatedListener } from './events/listeners/position-created-listener';
+import { PositionUpdatedListener } from './events/listeners/position-updated-listener';
 import { app } from './app';
 
 const start = async () => {
@@ -29,6 +30,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsWrapper.client.close());
 
     new PositionCreatedListener(natsWrapper.client).listen();
+    new PositionUpdatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
