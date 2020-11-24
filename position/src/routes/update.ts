@@ -7,13 +7,13 @@ import {
 import { body } from 'express-validator';
 import { User } from '../models/user';
 import { Position } from '../models/position';
-import { PositionCreatedPublisher } from '../events/publishers/position-created-publisher';
+import { PositionUpdatedPublisher } from '../events/publishers/position-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
-router.post(
-  '/api/position',
+router.put(
+  '/api/position/:id',
   requireAuth,
   [
     body('latitude')
@@ -26,33 +26,35 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { latitude, longitude } = req.body;
+    const position = await Position.findById(req.params.id);
+
+    if (!position)
+      throw new NotFoundError('Position not found with id: ' + req.params.id);
 
     const user = await User.findById(req.currentUser?.id);
-    if (!user) throw new NotFoundError();
+    if (!user) throw new NotFoundError('User not found');
 
     const expiration = new Date();
     expiration.setSeconds(
       expiration.getSeconds() + Number(process.env.EXPIRATION_WINDOW_SECONDS)
     );
 
-    const position = Position.build({
-      latitude,
-      longitude,
+    position.set({
+      coordinates: [longitude, latitude],
       expiresAt: expiration,
-      user,
     });
     await position.save();
 
-    new PositionCreatedPublisher(natsWrapper.client).publish({
+    new PositionUpdatedPublisher(natsWrapper.client).publish({
       id: position.id,
       coordinates: position.location.coordinates,
-      userId: user.id,
+      userId: String(req.currentUser?.id),
       version: position.version,
       expiresAt: position.expiresAt.toISOString(),
     });
 
-    res.status(201).send(position);
+    res.send(position);
   }
 );
 
-export { router as newPositionRouter };
+export { router as updatePositionRouter };

@@ -8,6 +8,7 @@ import {
   currentUser,
 } from '@alsafullstack/common';
 import { newPositionRouter } from './routes/new';
+import { updatePositionRouter } from './routes/update';
 import { findNearbyPlayers } from './routes/nearby-players';
 import { healthCheckRouter } from './routes/healthcheck';
 
@@ -24,6 +25,7 @@ app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(newPositionRouter);
 app.use(findNearbyPlayers);
+app.use(updatePositionRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

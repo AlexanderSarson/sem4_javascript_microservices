@@ -17,7 +17,7 @@ interface NearbyPlayersArgs {
 }
 
 interface PositionModel extends mongoose.Model<PositionDoc> {
-  build(attrs: PositionAttrs): Promise<PositionDoc>;
+  build(attrs: PositionAttrs): PositionDoc;
   findNearbyPlayers(attrs: NearbyPlayersArgs): Promise<PositionDoc[]>;
 }
 
@@ -75,18 +75,26 @@ positionSchema.set('versionKey', 'version');
 positionSchema.plugin(updateIfCurrentPlugin);
 
 positionSchema.statics.build = (attrs: PositionAttrs) => {
-  return Position.findOneAndUpdate(
-    { user: attrs.user },
-    {
-      location: {
-        type: 'Point',
-        coordinates: [attrs.longitude, attrs.latitude],
-      },
-      expiresAt: attrs.expiresAt,
-      user: attrs.user,
+  return new Position({
+    location: {
+      type: 'Point',
+      coordinates: [attrs.longitude, attrs.latitude],
     },
-    { upsert: true, new: true }
-  );
+    expiresAt: attrs.expiresAt,
+    user: attrs.user,
+  });
+  // Position.findOneAndUpdate(
+  //   { user: attrs.user },
+  //   {
+  //     location: {
+  //       type: 'Point',
+  //       coordinates: [attrs.longitude, attrs.latitude],
+  //     },
+  //     expiresAt: attrs.expiresAt,
+  //     user: attrs.user,
+  //   },
+  //   { upsert: true, new: true }
+  // );
 };
 
 positionSchema.statics.findNearbyPlayers = (args: NearbyPlayersArgs) => {
