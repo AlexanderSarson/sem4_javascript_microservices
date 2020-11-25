@@ -32,8 +32,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: position
-          file: ./position/Dockerfile
+          context: post
+          file: ./post/Dockerfile
           platforms: linux/amd64,linux/arm64 # Remember image in dockerfile should also support these platforms
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POST }}:latest,${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_POST }}:${{ github.sha }}
