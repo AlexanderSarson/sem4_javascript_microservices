@@ -17,12 +17,12 @@ const setup = async () => {
 
   await user.save();
 
-  const position = await Position.build({
-    latitude: 0,
-    longitude: 0,
-    expiresAt: new Date(),
-    user: user,
-  });
+  const position = await Position.updatePosition(
+    user,
+    [0, 0],
+    true,
+    new Date()
+  );
 
   const data: ExpirationCompleteEvent['data'] = {
     positionId: position.id,
@@ -40,9 +40,9 @@ it('removes the position', async () => {
   const { listener, position, data, msg } = await setup();
   await listener.onMessage(data, msg);
 
-  const positionNotFound = await Position.findById(position.id);
+  const positionNotActive = await Position.findById(position.id);
 
-  expect(positionNotFound).toBeNull();
+  expect(positionNotActive!.isActive).toBeFalsy();
 });
 
 it('acks the mssage', async () => {

@@ -14,12 +14,12 @@ const setup = async () => {
 
   await user1.save();
 
-  const position1 = await Position.build({
-    latitude: 0,
-    longitude: 0,
-    expiresAt: new Date(),
-    user: user1,
-  });
+  const position1 = await Position.updatePosition(
+    user1,
+    [0, 0],
+    true,
+    new Date()
+  );
 
   const cookie1 = global.signin(user1.id, user1.userName);
 
@@ -31,12 +31,12 @@ const setup = async () => {
 
   await user2.save();
 
-  const position2 = await Position.build({
-    latitude: 0,
-    longitude: 0,
-    expiresAt: new Date(),
-    user: user2,
-  });
+  const position2 = await Position.updatePosition(
+    user2,
+    [0, 0],
+    true,
+    new Date()
+  );
 
   const cookie2 = global.signin(user2.id, user2.userName);
 
@@ -48,12 +48,12 @@ const setup = async () => {
 
   await user3.save();
 
-  const position3 = await Position.build({
-    latitude: 0.01,
-    longitude: 0.01,
-    expiresAt: new Date(),
-    user: user3,
-  });
+  const position3 = await Position.updatePosition(
+    user3,
+    [0.01, 0.01],
+    true,
+    new Date()
+  );
 
   const cookie3 = global.signin(user3.id, user3.userName);
 
