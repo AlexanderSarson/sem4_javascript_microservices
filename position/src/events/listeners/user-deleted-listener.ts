@@ -1,9 +1,4 @@
-import {
-  Listener,
-  UserDeletedEvent,
-  Subjects,
-  NotFoundError,
-} from '@alsafullstack/common';
+import { Listener, UserDeletedEvent, Subjects } from '@alsafullstack/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { User } from '../../models/user';
@@ -17,7 +12,7 @@ class UserDeletedListener extends Listener<UserDeletedEvent> {
 
     const user = await User.findById(id);
 
-    if (!user) throw new NotFoundError('Could not find user: ' + userName);
+    if (!user) throw new Error('Could not find user: ' + userName);
 
     await user.deleteOne();
 

@@ -7,7 +7,7 @@ import {
 import { body } from 'express-validator';
 import { User } from '../models/user';
 import { Position } from '../models/position';
-import { PositionCreatedPublisher } from '../events/publishers/position-created-publisher';
+import { PositionUpdatedPublisher } from '../events/publishers/position-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
@@ -30,25 +30,34 @@ router.post(
     const user = await User.findById(req.currentUser?.id);
     if (!user) throw new NotFoundError();
 
+    // await Position.deleteOldPosition(user);
+
     const expiration = new Date();
     expiration.setSeconds(
       expiration.getSeconds() + Number(process.env.EXPIRATION_WINDOW_SECONDS)
     );
-
-    const position = Position.build({
-      latitude,
-      longitude,
-      expiresAt: expiration,
+    const position = await Position.updatePosition(
       user,
-    });
-    await position.save();
+      [latitude, longitude],
+      true,
+      expiration
+    );
+    // const position = Position.build({
+    //   latitude,
+    //   longitude,
+    //   expiresAt: expiration,
+    //   user,
+    // });
 
-    new PositionCreatedPublisher(natsWrapper.client).publish({
+    // await position.save();
+
+    new PositionUpdatedPublisher(natsWrapper.client).publish({
       id: position.id,
       coordinates: position.location.coordinates,
       userId: user.id,
       version: position.version,
       expiresAt: position.expiresAt.toISOString(),
+      isActive: position.isActive,
     });
 
     res.status(201).send(position);

@@ -26,31 +26,29 @@ router.put(
   validateRequest,
   async (req: Request, res: Response) => {
     const { latitude, longitude } = req.body;
-    const position = await Position.findById(req.params.id);
-
-    if (!position)
-      throw new NotFoundError('Position not found with id: ' + req.params.id);
 
     const user = await User.findById(req.currentUser?.id);
-    if (!user) throw new NotFoundError('User not found');
+    if (!user) throw new NotFoundError();
 
     const expiration = new Date();
     expiration.setSeconds(
       expiration.getSeconds() + Number(process.env.EXPIRATION_WINDOW_SECONDS)
     );
 
-    position.set({
-      coordinates: [longitude, latitude],
-      expiresAt: expiration,
-    });
-    await position.save();
+    const position = await Position.updatePosition(
+      user,
+      [latitude, longitude],
+      true,
+      expiration
+    );
 
     new PositionUpdatedPublisher(natsWrapper.client).publish({
       id: position.id,
       coordinates: position.location.coordinates,
-      userId: String(req.currentUser?.id),
+      userId: position.user.id,
       version: position.version,
       expiresAt: position.expiresAt.toISOString(),
+      isActive: position.isActive,
     });
 
     res.send(position);

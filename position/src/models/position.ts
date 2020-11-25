@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { User, UserDoc } from './user';
+// import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import { UserDoc } from './user';
+// import { PositionDeletedPublisher } from '../events/publishers/position-deleted-publisher';
+// import { natsWrapper } from '../nats-wrapper';
 
-interface PositionAttrs {
-  longitude: number;
-  latitude: number;
-  expiresAt: Date;
-  user: UserDoc;
-}
+// interface PositionAttrs {
+//   longitude: number;
+//   latitude: number;
+//   expiresAt: Date;
+//   user: UserDoc;
+// }
 
 interface NearbyPlayersArgs {
   longitude: number;
@@ -17,8 +19,15 @@ interface NearbyPlayersArgs {
 }
 
 interface PositionModel extends mongoose.Model<PositionDoc> {
-  build(attrs: PositionAttrs): PositionDoc;
+  // build(attrs: PositionAttrs): PositionDoc;
   findNearbyPlayers(attrs: NearbyPlayersArgs): Promise<PositionDoc[]>;
+  // deleteOldPosition(user: UserDoc): Promise<void>;
+  updatePosition(
+    user: UserDoc,
+    coordinates: number[],
+    isActive: boolean,
+    expiresAt: Date
+  ): Promise<PositionDoc>;
 }
 
 interface PositionDoc extends mongoose.Document {
@@ -29,6 +38,7 @@ interface PositionDoc extends mongoose.Document {
   expiresAt: Date;
   user: UserDoc;
   version: number;
+  isActive: boolean;
 }
 
 const pointSchema = new mongoose.Schema({
@@ -59,6 +69,10 @@ const positionSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   {
@@ -72,29 +86,57 @@ const positionSchema = new mongoose.Schema(
 );
 
 positionSchema.set('versionKey', 'version');
-positionSchema.plugin(updateIfCurrentPlugin);
 
-positionSchema.statics.build = (attrs: PositionAttrs) => {
-  return new Position({
-    location: {
-      type: 'Point',
-      coordinates: [attrs.longitude, attrs.latitude],
+// positionSchema.statics.deleteOldPosition = async (user: UserDoc) => {
+//   const oldPosition = await Position.findOne({ user: user });
+//   if (oldPosition) {
+//     await oldPosition.deleteOne();
+//     if (oldPosition.isActive) {
+//       new PositionDeletedPublisher(natsWrapper.client).publish({
+//         id: oldPosition.id,
+//       });
+//     }
+//   }
+// };
+
+// positionSchema.statics.build = (attrs: PositionAttrs) => {
+//   return new Position({
+//     location: {
+//       type: 'Point',
+//       coordinates: [attrs.longitude, attrs.latitude],
+//     },
+//     expiresAt: attrs.expiresAt,
+//     user: attrs.user,
+//     isActive: true,
+//   });
+// };
+
+positionSchema.statics.updatePosition = async (
+  user: UserDoc,
+  coordinates: number[],
+  isActive: boolean,
+  expiresAt: Date
+) => {
+  const oldPosition = await Position.findOne({ user: user });
+  let version = 0;
+  if (oldPosition) {
+    version = oldPosition.version + 1;
+  }
+  const position = await Position.findOneAndUpdate(
+    { user },
+    {
+      location: {
+        type: 'Point',
+        coordinates,
+      },
+      user,
+      isActive,
+      expiresAt,
+      version,
     },
-    expiresAt: attrs.expiresAt,
-    user: attrs.user,
-  });
-  // Position.findOneAndUpdate(
-  //   { user: attrs.user },
-  //   {
-  //     location: {
-  //       type: 'Point',
-  //       coordinates: [attrs.longitude, attrs.latitude],
-  //     },
-  //     expiresAt: attrs.expiresAt,
-  //     user: attrs.user,
-  //   },
-  //   { upsert: true, new: true }
-  // );
+    { upsert: true, new: true }
+  ).populate('user');
+  return position;
 };
 
 positionSchema.statics.findNearbyPlayers = (args: NearbyPlayersArgs) => {
