@@ -8,7 +8,7 @@ import { PositionDeletedListener } from './events/listeners/position-deleted-lis
 import { PositionUpdatedListener } from './events/listeners/position-updated-listener';
 
 const start = async () => {
-  console.log('Starting up....');
+  console.log('Starting up...');
   if (!process.env.MONGO_URI) throw new Error('MONGO_URI must be defined');
   if (!process.env.JWT_KEY) throw new Error('JWT_KEY must be defined');
   if (!process.env.NATS_URL) throw new Error('NATS_URL must be defined');
