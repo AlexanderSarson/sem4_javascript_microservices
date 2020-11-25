@@ -141,7 +141,7 @@ positionSchema.statics.updatePosition = async (
 
 positionSchema.statics.findNearbyPlayers = (args: NearbyPlayersArgs) => {
   const { longitude, latitude, distance, user } = args;
-  const point = { type: 'Point', coordinates: [longitude, latitude] };
+  const point = { type: 'Point', coordinates: [latitude, longitude] };
   const nearbyPlayers = Position.find({
     user: { $ne: user },
     location: {
