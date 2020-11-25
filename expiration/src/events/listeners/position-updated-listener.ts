@@ -18,15 +18,15 @@ class PositionUpdatedListener extends Listener<PositionUpdatedEvent> {
       await job.remove();
       console.log('Position already in queue - removing old position...');
     }
-
-    await expirationQueue.add(
-      {
-        positionId: data.id,
-      },
-      { delay: delay, jobId: data.id }
-    );
-    console.log('Waiting this many milliseconds to process the job:', delay);
-
+    if (data.isActive) {
+      await expirationQueue.add(
+        {
+          positionId: data.id,
+        },
+        { delay: delay, jobId: data.id }
+      );
+      console.log('Waiting this many milliseconds to process the job:', delay);
+    }
     msg.ack();
   }
 }

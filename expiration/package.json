@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@alsafullstack/common": "^1.0.10",
+    "@alsafullstack/common": "^1.0.12",
     "@types/bull": "^3.14.4",
     "bull": "^3.18.0",
     "node-nats-streaming": "^0.3.2",
