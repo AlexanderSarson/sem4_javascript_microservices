@@ -22,6 +22,7 @@ app.use(
     secure: false,
   })
 );
+
 app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(findPostRouter);
