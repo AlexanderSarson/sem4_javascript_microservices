@@ -12,6 +12,7 @@ import { allPostRouter } from './routes/all';
 import { showPostRouter } from './routes/show';
 import { findPostRouter } from './routes/find';
 import { healthCheckRouter } from './routes/healthcheck';
+import { gameAreaRouter } from './routes/game-area';
 
 const app = express();
 app.set('trust proxy', true);
@@ -29,6 +30,7 @@ app.use(findPostRouter);
 app.use(newPostRouter);
 app.use(allPostRouter);
 app.use(showPostRouter);
+app.use(gameAreaRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
