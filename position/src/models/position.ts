@@ -143,7 +143,7 @@ positionSchema.statics.findNearbyPlayers = (args: NearbyPlayersArgs) => {
   const { longitude, latitude, distance, user } = args;
   const point = { type: 'Point', coordinates: [latitude, longitude] };
   const nearbyPlayers = Position.find({
-    user: { $ne: user },
+    $and: [{ user: { $ne: user } }, { isActive: { $eq: true } }],
     location: {
       $near: {
         $geometry: point,
