@@ -19,7 +19,8 @@ jobs:
           npm run test:ci
           npm run graph &
           sleep 10
-          npx apollo service:push --graph=geo-sfzg9g \
+          npx apollo service:push \
+           --graph=geo-prod-c9ijqr \
            --key=${{ secrets.APOLLO_API_KEY }} \
            --variant=current \
            --serviceName=position \
