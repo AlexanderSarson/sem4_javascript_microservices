@@ -27,8 +27,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: post
-          file: ./post/Dockerfile
+          context: graphql-gateway
+          file: ./graphql-gateway/Dockerfile
           platforms: linux/amd64,linux/arm64 # Remember image in dockerfile should also support these platforms
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_GRAPHQL_GATEWAY }}:latest,${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME_GRAPHQL_GATEWAY }}:${{ github.sha }}

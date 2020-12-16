@@ -28,6 +28,6 @@ const gateway = new ApolloGateway({
   });
 
   server.listen({ port: 3000 }).then(() => {
-    console.log(`Listening on 3000!`);
+    console.log(`Listening on 3000...`);
   });
 })();
