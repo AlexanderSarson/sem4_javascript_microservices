@@ -11,10 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd auth
-      - run: npm install && npm run test:ci
-      - run: npm run graph
-      - run: npx apollo service:push \
+      - run: cd auth && npm install && npm run test:ci
+      - run: cd auth && npm run graph
+      - run: cd auth && npx apollo service:push \
           --graph=geo-sfzg9g \
           --key=service:${{ secrets.APOLLO_API_KEY }} \
           --variant=current \
