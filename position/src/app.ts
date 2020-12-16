@@ -2,6 +2,10 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import { ApolloServer } from 'apollo-server-express';
+import { buildFederatedSchema } from '@apollo/federation';
+import { typeDefs } from './graphql/schema';
+import { resolvers } from './graphql/resolvers';
 import {
   NotFoundError,
   errorHandler,
@@ -13,6 +17,8 @@ import { findNearbyPlayers } from './routes/nearby-players';
 import { healthCheckRouter } from './routes/healthcheck';
 
 const app = express();
+const path = '/position/graphql';
+
 app.set('trust proxy', true);
 app.use(json());
 app.use(
@@ -26,6 +32,12 @@ app.use(currentUser);
 app.use(newPositionRouter);
 app.use(findNearbyPlayers);
 app.use(updatePositionRouter);
+const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers: resolvers as any }]),
+  context: ({ req, res }) => ({ req, res }),
+  introspection: true,
+});
+server.applyMiddleware({ app, path, cors: false });
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import {
-  NotFoundError,
+  BadRequestError,
   requireAuth,
   validateRequest,
 } from '@alsafullstack/common';
@@ -28,9 +28,7 @@ router.post(
     const { latitude, longitude } = req.body;
 
     const user = await User.findById(req.currentUser?.id);
-    if (!user) throw new NotFoundError();
-
-    // await Position.deleteOldPosition(user);
+    if (!user) throw new BadRequestError('User not found');
 
     const expiration = new Date();
     expiration.setSeconds(
@@ -42,18 +40,12 @@ router.post(
       true,
       expiration
     );
-    // const position = Position.build({
-    //   latitude,
-    //   longitude,
-    //   expiresAt: expiration,
-    //   user,
-    // });
-
-    // await position.save();
 
     new PositionUpdatedPublisher(natsWrapper.client).publish({
+      // @ts-ignore
       id: position.id,
       coordinates: position.location.coordinates,
+      // @ts-ignore
       userId: user.id,
       version: position.version,
       expiresAt: position.expiresAt.toISOString(),

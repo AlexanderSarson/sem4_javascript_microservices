@@ -43,8 +43,10 @@ router.put(
     );
 
     new PositionUpdatedPublisher(natsWrapper.client).publish({
+      // @ts-ignore
       id: position.id,
       coordinates: position.location.coordinates,
+      // @ts-ignore
       userId: position.user.id,
       version: position.version,
       expiresAt: position.expiresAt.toISOString(),

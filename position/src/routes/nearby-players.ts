@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import {
-  NotFoundError,
+  BadRequestError,
   requireAuth,
   validateRequest,
 } from '@alsafullstack/common';
@@ -35,7 +35,7 @@ router.post(
     const { longitude, latitude, distance } = req.body;
 
     const user = await User.findById(req.currentUser!.id);
-    if (!user) throw new NotFoundError('User not found');
+    if (!user) throw new BadRequestError('User not found');
 
     const nearbyPlayers = await Position.findNearbyPlayers({
       longitude,

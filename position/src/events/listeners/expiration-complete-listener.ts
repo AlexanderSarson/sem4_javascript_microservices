@@ -28,6 +28,7 @@ class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent> {
     );
 
     new PositionExpiredPublisher(natsWrapper.client).publish({
+      // @ts-ignore
       id: position.id,
       version: position.version,
     });

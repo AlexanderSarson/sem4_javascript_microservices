@@ -1,15 +1,6 @@
+// @ts-nocheck
 import mongoose from 'mongoose';
-// import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { UserDoc } from './user';
-// import { PositionDeletedPublisher } from '../events/publishers/position-deleted-publisher';
-// import { natsWrapper } from '../nats-wrapper';
-
-// interface PositionAttrs {
-//   longitude: number;
-//   latitude: number;
-//   expiresAt: Date;
-//   user: UserDoc;
-// }
 
 interface NearbyPlayersArgs {
   longitude: number;
@@ -19,9 +10,7 @@ interface NearbyPlayersArgs {
 }
 
 interface PositionModel extends mongoose.Model<PositionDoc> {
-  // build(attrs: PositionAttrs): PositionDoc;
   findNearbyPlayers(attrs: NearbyPlayersArgs): Promise<PositionDoc[]>;
-  // deleteOldPosition(user: UserDoc): Promise<void>;
   updatePosition(
     user: UserDoc,
     coordinates: number[],
@@ -84,32 +73,7 @@ const positionSchema = new mongoose.Schema(
     },
   }
 );
-
 positionSchema.set('versionKey', 'version');
-
-// positionSchema.statics.deleteOldPosition = async (user: UserDoc) => {
-//   const oldPosition = await Position.findOne({ user: user });
-//   if (oldPosition) {
-//     await oldPosition.deleteOne();
-//     if (oldPosition.isActive) {
-//       new PositionDeletedPublisher(natsWrapper.client).publish({
-//         id: oldPosition.id,
-//       });
-//     }
-//   }
-// };
-
-// positionSchema.statics.build = (attrs: PositionAttrs) => {
-//   return new Position({
-//     location: {
-//       type: 'Point',
-//       coordinates: [attrs.longitude, attrs.latitude],
-//     },
-//     expiresAt: attrs.expiresAt,
-//     user: attrs.user,
-//     isActive: true,
-//   });
-// };
 
 positionSchema.statics.updatePosition = async (
   user: UserDoc,

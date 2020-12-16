@@ -11,15 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd position && npm install && npm run test:ci
-      - run: cd position && npm run graph
-      - run: cd position && npx apollo service:push \
-          --graph=geo-sfzg9g \
-          --key=service:${{ secrets.APOLLO_API_KEY }} \
-          --variant=current \
-          --serviceName=position \
-          --serviceURL=http://position-srv:3000/position/graphql \
-          --endpoint=http://localhost:3000/position/graphql
+
+      - name: npm install, test and push graphql schema
+        working-directory: position
+        run: |
+          npm install
+          npm run test:ci
+          npm run graph &
+          sleep 10
+          npx apollo service:push --graph=geo-sfzg9g \
+           --key=${{ secrets.APOLLO_API_KEY }} \
+           --variant=current \
+           --serviceName=position \
+           --serviceURL=http://position-srv:3000/position/graphql \
+           --endpoint=http://localhost:3000/position/graphql
   build:
     runs-on: ubuntu-latest
     needs: test
