@@ -18,6 +18,7 @@ jobs:
           npm install
           npm run test:ci
           npm run graph &
+          sleep 10
           npx apollo service:push --graph=geo-sfzg9g \
            --key=${{ secrets.APOLLO_API_KEY }} \
            --variant=current \
