@@ -19,6 +19,9 @@ images:
 - name: alexandersarson/geo-expiration
   newName: alexandersarson/geo-expiration
   newTag: df5c166dbe0df411d8fa006f2f1b91061f9a386d
+- name: alexandersarson/geo-graphql-gateway
+  newName: alexandersarson/geo-graphql-gateway
+  newTag: 51d04921b3e4460e4dc365bd01619bf3a9c40f7d
 - name: alexandersarson/geo-position
   newName: alexandersarson/geo-position
   newTag: 6a4c95f2da134a112b08aff3e4e5a94ca61c6343
