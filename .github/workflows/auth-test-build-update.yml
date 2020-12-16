@@ -15,10 +15,15 @@ jobs:
       - name: npm install, test and push graphql schema
         working-directory: auth
         run: |
-        npm install
-        npm run test:ci
-        npm run graph &
-        npx apollo service:push --graph=geo-sfzg9g --key=${{ secrets.APOLLO_API_KEY }} --variant=current --serviceName=auth --serviceURL=http://auth-srv:3000/users/graphql --endpoint=http://localhost:3000/users/graphql
+          npm install
+          npm run test:ci
+          npm run graph &
+          npx apollo service:push --graph=geo-sfzg9g \
+           --key=${{ secrets.APOLLO_API_KEY }} \
+           --variant=current \
+           --serviceName=auth \
+           --serviceURL=http://auth-srv:3000/users/graphql \
+           --endpoint=http://localhost:3000/users/graphql
   build:
     runs-on: ubuntu-latest
     needs: test
