@@ -1,7 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import { ApolloServer } from 'apollo-server-express';
+import { buildFederatedSchema } from '@apollo/federation';
+import { typeDefs } from './graphql/schema';
+import { resolvers } from './graphql/resolvers';
 import {
   NotFoundError,
   errorHandler,
@@ -13,9 +17,15 @@ import { showUserRouter } from './routes/show';
 import { signinUserRouter } from './routes/signin';
 import { deleteUserRouter } from './routes/delete';
 import { healthCheckRouter } from './routes/healthcheck';
-import morgan from 'morgan';
 
 const app = express();
+const path = '/users/graphql';
+
+const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers: resolvers as any }]),
+  introspection: true,
+});
+server.applyMiddleware({ app, path });
 
 app.set('trust proxy', true);
 app.use(json());
@@ -25,7 +35,6 @@ app.use(
     secure: false, //process.env.NODE_ENV !== 'test',
   })
 );
-app.use(morgan('tiny'));
 app.use(healthCheckRouter);
 app.use(currentUser);
 app.use(newUserRouter);
@@ -34,7 +43,7 @@ app.use(showUserRouter);
 app.use(signinUserRouter);
 app.use(deleteUserRouter);
 
-app.all('*', async (req, res) => {
+app.all('*', async (req: Request, res: Response) => {
   throw new NotFoundError();
 });
 

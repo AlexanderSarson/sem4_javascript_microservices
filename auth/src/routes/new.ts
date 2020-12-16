@@ -33,9 +33,9 @@ router.post(
     await user.save();
 
     await new UserCreatedPublisher(natsWrapper.client).publish({
-      id: user.id,
-      userName: user.userName,
-      name: user.name,
+      id: user.id!,
+      userName: user.userName!,
+      name: user.name!,
     });
 
     // Generate json webtoken

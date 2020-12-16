@@ -18,13 +18,13 @@ router.delete(
   validateRequest,
   async (req: Request, res: Response) => {
     const { userName } = req.body;
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ userName: userName });
 
     if (!user) throw new BadRequestError('No user with that username');
 
     await user.deleteOne();
     await new UserDeletedPublisher(natsWrapper.client).publish({
-      id: user.id,
+      id: user.id!,
       userName: user.userName,
     });
 
