@@ -25,7 +25,7 @@ images:
   newTag: 9439422b965cee0c5adcfd523cba3e58e2aedf4d
 - name: alexandersarson/geo-position
   newName: alexandersarson/geo-position
-  newTag: 6a4c95f2da134a112b08aff3e4e5a94ca61c6343
+  newTag: 5863d0039e20c1d63e59ef83f37545b723aeb90d
 - name: alexandersarson/geo-post
   newName: alexandersarson/geo-post
   newTag: 080a7d21970a7612003876efdd8c7e18be76d05f
