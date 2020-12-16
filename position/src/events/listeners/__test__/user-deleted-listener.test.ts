@@ -16,6 +16,7 @@ const setup = async () => {
 
   await user.save();
 
+  if (!user.id) throw new Error('ID missing');
   const data: UserDeletedEvent['data'] = {
     id: user.id,
     userName: user.userName,

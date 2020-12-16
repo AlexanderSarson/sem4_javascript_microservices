@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
+    "graph": "ts-node-dev --poll src/graphql.ts",
     "test": "jest --watchAll --no-cache",
     "test:ci": "jest"
   },

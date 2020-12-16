@@ -23,7 +23,7 @@ const setup = async () => {
     true,
     new Date()
   );
-
+  if (!position.id) throw new Error('ID missing');
   const data: ExpirationCompleteEvent['data'] = {
     positionId: position.id,
   };
