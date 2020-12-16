@@ -22,7 +22,7 @@ images:
   newTag: df5c166dbe0df411d8fa006f2f1b91061f9a386d
 - name: alexandersarson/geo-graphql-gateway
   newName: alexandersarson/geo-graphql-gateway
-  newTag: 882f2887d0573818fc52206175e6c68d56190e50
+  newTag: 9439422b965cee0c5adcfd523cba3e58e2aedf4d
 - name: alexandersarson/geo-position
   newName: alexandersarson/geo-position
   newTag: 6a4c95f2da134a112b08aff3e4e5a94ca61c6343
