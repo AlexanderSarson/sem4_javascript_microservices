@@ -29,3 +29,7 @@ spec:
             backend:
               serviceName: post-srv
               servicePort: 3000
+          - path: /graphql
+            backend:
+              serviceName: graphql-gateway-srv
+              servicePort: 3000
