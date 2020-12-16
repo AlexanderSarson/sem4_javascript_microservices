@@ -1,30 +1,31 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ./k8s-prod/auth-depl.yaml
-- ./k8s/auth-mongo-depl.yaml
-- ./k8s-prod/expiration-depl.yaml
-- ./k8s/expiration-redis-depl.yaml
-- ./k8s/nats-depl.yaml
-- ./k8s-prod/position-depl.yaml
-- ./k8s/position-mongo-depl.yaml
-- ./k8s-prod/ingress-srv.yaml
-- ./k8s/post-mongo-depl.yaml
-- ./k8s-prod/post-depl.yaml
+  - ./k8s-prod/auth-depl.yaml
+  - ./k8s/auth-mongo-depl.yaml
+  - ./k8s-prod/expiration-depl.yaml
+  - ./k8s/expiration-redis-depl.yaml
+  - ./k8s/nats-depl.yaml
+  - ./k8s-prod/position-depl.yaml
+  - ./k8s/position-mongo-depl.yaml
+  - ./k8s-prod/ingress-srv.yaml
+  - ./k8s/post-mongo-depl.yaml
+  - ./k8s-prod/post-depl.yaml
+  - ./k8s-prod/graphql-gateway-depl.yaml
 namespace: geo
 images:
-- name: alexandersarson/geo-auth
-  newName: alexandersarson/geo-auth
-  newTag: 76ec0a866aa327719c64c4fd489978835d5fb101
-- name: alexandersarson/geo-expiration
-  newName: alexandersarson/geo-expiration
-  newTag: df5c166dbe0df411d8fa006f2f1b91061f9a386d
-- name: alexandersarson/geo-graphql-gateway
-  newName: alexandersarson/geo-graphql-gateway
-  newTag: 51d04921b3e4460e4dc365bd01619bf3a9c40f7d
-- name: alexandersarson/geo-position
-  newName: alexandersarson/geo-position
-  newTag: 6a4c95f2da134a112b08aff3e4e5a94ca61c6343
-- name: alexandersarson/geo-post
-  newName: alexandersarson/geo-post
-  newTag: 080a7d21970a7612003876efdd8c7e18be76d05f
+  - name: alexandersarson/geo-auth
+    newName: alexandersarson/geo-auth
+    newTag: 76ec0a866aa327719c64c4fd489978835d5fb101
+  - name: alexandersarson/geo-expiration
+    newName: alexandersarson/geo-expiration
+    newTag: df5c166dbe0df411d8fa006f2f1b91061f9a386d
+  - name: alexandersarson/geo-graphql-gateway
+    newName: alexandersarson/geo-graphql-gateway
+    newTag: 51d04921b3e4460e4dc365bd01619bf3a9c40f7d
+  - name: alexandersarson/geo-position
+    newName: alexandersarson/geo-position
+    newTag: 6a4c95f2da134a112b08aff3e4e5a94ca61c6343
+  - name: alexandersarson/geo-post
+    newName: alexandersarson/geo-post
+    newTag: 080a7d21970a7612003876efdd8c7e18be76d05f

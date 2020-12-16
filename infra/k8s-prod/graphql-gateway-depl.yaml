@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-gateway-depl
+  namespace: geo
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: graphql-gateway
+  template:
+    metadata:
+      labels:
+        app: graphql-gateway
+    spec:
+      containers:
+        - name: graphql-gateway
+          image: alexandersarson/geo-graphql-gateway
+          env:
+            - name: APOLLO_GRAPH_VARIANT
+              value: current
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: APOLLO_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: apollo-api
+                  key: APOLLO_KEY
+          resources:
+            limits:
+              memory: '500Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-gateway-srv
+  namespace: geo
+spec:
+  selector:
+    app: graphql-gateway
+  ports:
+    - port: 3000
+      targetPort: 3000
+      name: graphql-gateway
+      protocol: TCP

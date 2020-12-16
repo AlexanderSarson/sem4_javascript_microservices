@@ -22,7 +22,7 @@ spec:
           image: alexandersarson/geo-position
           env:
             - name: EXPIRATION_WINDOW_SECONDS
-              value: '30'
+              value: '300'
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:

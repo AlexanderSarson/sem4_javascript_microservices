@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ingress-service
@@ -15,13 +15,29 @@ spec:
             backend:
               serviceName: auth-srv
               servicePort: 3000
+          - path: /users/graphql
+            backend:
+              serviceName: auth-srv
+              servicePort: 3000
           - path: /api/position/?(.*)
+            backend:
+              serviceName: position-srv
+              servicePort: 3000
+          - path: /position/graphql
             backend:
               serviceName: position-srv
               servicePort: 3000
           - path: /api/post/?(.*)
             backend:
               serviceName: post-srv
+              servicePort: 3000
+          - path: /post/graphql
+            backend:
+              serviceName: post-srv
+              servicePort: 3000
+          - path: /graphql
+            backend:
+              serviceName: graphql-gateway-srv
               servicePort: 3000
           # - path: /?(.*)
           #   backend:

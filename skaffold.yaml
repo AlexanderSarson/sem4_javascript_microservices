@@ -41,3 +41,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: alexandersarson/geo-graphql-gateway
+      context: graphql-gateway
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
