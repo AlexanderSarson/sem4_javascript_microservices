@@ -21,6 +21,12 @@ const resolvers = {
   Mutation: {
     addUser: async (parent: any, args: any) => {
       const { userName, password, name, role } = args.input;
+      const existingUser = await UserDB.findOne({
+        userName,
+      });
+  
+      if (existingUser) throw new BadRequestError('Username already in use');
+      
       const user = UserDB.build({ userName, password, name, role });
       await user.save();
       await new UserCreatedPublisher(natsWrapper.client).publish({
