@@ -15,14 +15,14 @@ const typeDefs = gql`
   }
 
   input UserInput {
-    userName: String
-    password: String
-    name: String
-    role: String
+    userName: String!
+    password: String!
+    name: String!
+    role: String!
   }
 
   type Mutation {
-    addUser(input: UserInput): User
+    addUser(input: UserInput!): User
   }
 `;
 
