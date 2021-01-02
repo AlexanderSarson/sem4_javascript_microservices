@@ -1,6 +1,7 @@
 import { User as UserDB } from '../models/user';
 import { BadRequestError } from '@alsafullstack/common';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
+import { UserDeletedPublisher } from '../events/publishers/user-deleted-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const resolvers = {
@@ -26,7 +27,7 @@ const resolvers = {
       });
   
       if (existingUser) throw new BadRequestError('Username already in use');
-      
+
       const user = UserDB.build({ userName, password, name, role });
       await user.save();
       await new UserCreatedPublisher(natsWrapper.client).publish({
@@ -36,6 +37,19 @@ const resolvers = {
       });
       return user;
     },
+    deleteUser: async (parent: any, args: any) => {
+      const { userName } = args;
+      const user = await UserDB.findOne({ userName: userName });
+
+      if (!user) throw new BadRequestError('No user with that username');
+
+      await user.deleteOne();
+      await new UserDeletedPublisher(natsWrapper.client).publish({
+        id: user.id!,
+        userName: user.userName,
+      });
+      return user;
+    }
   },
 };
 

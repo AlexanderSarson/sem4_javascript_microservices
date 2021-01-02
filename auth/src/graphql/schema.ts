@@ -23,6 +23,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(input: UserInput!): User
+    deleteUser(userName: String!): User
   }
 `;
 
