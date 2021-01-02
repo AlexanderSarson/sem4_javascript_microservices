@@ -10,7 +10,9 @@ const typeDefs = gql`
   }
 
   type Query {
+    "Returns all users"
     users: [User]
+    "Returns requested user"
     user(userName: String!): User
   }
 
@@ -22,7 +24,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    "
+    Returns the added user
+    "
     addUser(input: UserInput!): User
+    "
+    Returns the deleted user
+    "
     deleteUser(userName: String!): User
   }
 `;
