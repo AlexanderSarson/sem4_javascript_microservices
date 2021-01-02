@@ -24,13 +24,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    "
-    Returns the added user
-    "
+    "Returns the added user"
     addUser(input: UserInput!): User
-    "
-    Returns the deleted user
-    "
+    "Returns the deleted user"
     deleteUser(userName: String!): User
   }
 `;
