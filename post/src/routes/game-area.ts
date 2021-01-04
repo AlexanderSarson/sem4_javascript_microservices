@@ -8,6 +8,7 @@ const polygonForClient = {
     return { latitude: point[1], longitude: point[0] };
   }),
 };
+
 router.get(
   '/api/post/game/area',
   requireAuth,
